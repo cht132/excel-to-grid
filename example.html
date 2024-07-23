@@ -1,0 +1,31 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <script src="https://unpkg.com/unlazy@0.11.3/dist/unlazy.with-hashing.iife.js" defer init></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/cht132/excel-to-grid@latest/main.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cht132/excel-to-grid@latest/style.css">
+</head>
+<body>
+<script>
+    var data
+    (async () => {
+      const file = await (await fetch("example.xlsx")).arrayBuffer();
+      const workbook = XLSX.read(file);
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      const headers = jsonData[0];
+      data = [...new Set(data.map(row => JSON.stringify(row)))].map(row => JSON.parse(row));
+      data = sortStatus(data)
+      generateContent(data);
+      UpdateItemColor()
+    })()
+
+  </script>
+
+  </body>
+
+</html>
